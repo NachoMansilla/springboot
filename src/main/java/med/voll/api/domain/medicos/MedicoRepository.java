@@ -1,4 +1,4 @@
-package med.voll.api.medicos;
+package med.voll.api.domain.medicos;
 
 import io.micrometer.observation.ObservationFilter;
 import org.springframework.data.domain.Page;

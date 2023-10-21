@@ -1,11 +1,11 @@
-package med.voll.api.medicos;
+package med.voll.api.domain.medicos;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import med.voll.api.direccion.DatosDireccion;
-import med.voll.api.direccion.Direccion;
+import med.voll.api.domain.direccion.DatosDireccion;
+import med.voll.api.domain.direccion.Direccion;
 
 @Table(name = "medicos")
 @Entity(name = "Medico")
