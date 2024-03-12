@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import med.voll.api.domain.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,13 +33,13 @@ public class TokenService {
         }
     }
     private Instant generarFechaExpiracion() {
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-05:00"));
+        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
 
     }
 
     public String getSubject(String token) {
         if (token == null) {
-            throw new RuntimeException();
+            throw new RuntimeException("Token no proporcionado");
         }
         DecodedJWT verifier = null;
         try {
@@ -48,6 +49,11 @@ public class TokenService {
                     .build()
                     .verify(token);
             verifier.getSubject();
+
+        } catch (TokenExpiredException e) {
+            // Manejar específicamente la expiración del token
+            throw new RuntimeException("Token expirado");
+
         }catch (JWTVerificationException exception) {
             System.out.println(exception.toString());
         }
