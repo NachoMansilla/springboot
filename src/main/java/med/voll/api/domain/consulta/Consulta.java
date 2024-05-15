@@ -32,4 +32,18 @@ public class Consulta {
 
     private LocalDateTime fecha;
 
+    @Column(name = "motivo_cancelamiento")
+    @Enumerated(EnumType.STRING)
+    private MotivoDeCancelacion motivoDeCancelacion;
+
+
+    public Consulta( Medico medico, Paciente paciente, LocalDateTime fecha) {
+        this.medico=medico;
+        this.paciente=paciente;
+        this.fecha=fecha;
+    }
+    public void cancelar(MotivoDeCancelacion motivo) {
+        this.motivoDeCancelacion = motivo;
+    }
+
 }
