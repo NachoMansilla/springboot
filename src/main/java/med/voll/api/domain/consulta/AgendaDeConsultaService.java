@@ -1,5 +1,6 @@
 package med.voll.api.domain.consulta;
 
+import med.voll.api.domain.consulta.validaciones.ValidadorDeCancelamientos;
 import med.voll.api.domain.consulta.validaciones.ValidadorDeConsultas;
 import med.voll.api.domain.medicos.Medico;
 import med.voll.api.domain.medicos.MedicoRepository;
@@ -25,6 +26,9 @@ public class AgendaDeConsultaService {
     @Autowired
     List<ValidadorDeConsultas> validadores;
 
+    @Autowired
+    List<ValidadorDeCancelamientos> validadoresDeCancelamiento;
+
     public DatosDetalleConsulta agendar(DatosAgendarConsulta datos) {
 
         if(!pacienteRepository.findById(datos.idPaciente()).isPresent()) {
@@ -38,11 +42,26 @@ public class AgendaDeConsultaService {
         validadores.forEach(v-> v.validar(datos));
 
         var paciente = pacienteRepository.findById(datos.idPaciente()).get();
-        var medico = medicoRepository.findById(datos.idMedico()).get();
+        //var medico = medicoRepository.findById(datos.idMedico()).get();
+        var medico = seleccionarMedico(datos);
 
-        var consulta = new Consulta(null, medico, paciente, datos.fecha());
+        var consulta = new Consulta(medico, paciente, datos.fecha());
         consultaRepository.save(consulta);
         return new DatosDetalleConsulta(consulta);
+    }
+
+    public void cancelar(DatosCancelamientoConsulta datos) {
+        if(!consultaRepository.existsById(datos.id())){
+            throw new ValidacionDeIntegridad("Este id de consulta no fue encontrado");
+        }
+
+        validadoresDeCancelamiento.forEach(v-> v.validar(datos));
+
+        var consulta = consultaRepository.getReferenceById(datos.id());
+        consulta.cancelar(datos.motivoDeCancelacion());
+
+
+
     }
 
     private Medico seleccionarMedico(DatosAgendarConsulta datos) {
