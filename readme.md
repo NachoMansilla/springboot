@@ -69,6 +69,3 @@ Al registrar un paciente, se deben proporcionar los siguientes datos:
 - Maven
 - JPA/Hibernate
 - MySQL
-
-## Instalación y Ejecución
-Instrucciones para la instalación y ejecución del proyecto.
